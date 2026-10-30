@@ -5,58 +5,48 @@ import { useEmileStore } from '@/store/useEmileStore';
 
 export const CountStrip: React.FC = () => {
   const tally = useEmileStore((state) => state.tally);
-  const model = useEmileStore((state) => state.model);
   const holdersList = useEmileStore((state) => state.holdersList);
 
-  const medianHolders = holdersList.length ? holdersList[holdersList.length >> 1] : null;
+  const sortedHolders = [...holdersList].sort((a, b) => a - b);
+  const medianHolders = sortedHolders.length ? sortedHolders[sortedHolders.length >> 1] : null;
 
   return (
-    <div className="stats-grid band shadow-lg">
-      <div className="st">
-        <div className="st-k flex items-center gap-1.5 text-[var(--cyan)]">
-          <span className="w-1.5 h-1.5 rounded-full bg-[var(--cyan)] animate-pulse" />
-          Entered The River
+    <>
+      <div className="wave-rule top-wave" aria-hidden="true" />
+      <div className="band stats-grid">
+        <div className="st">
+          <div className="st-k">entered the river</div>
+          <div className="st-v" id="tAll">
+            {tally.all.toLocaleString('en-US')}
+          </div>
+          <div className="st-d">Peak market cap above $10K</div>
         </div>
-        <div className="st-v" style={{ color: 'var(--cyan)' }}>
-          {tally.all.toLocaleString('en-US')}
-        </div>
-        <div className="st-d font-mono text-xs opacity-75">Solana tokens peak MC ≥ $10K</div>
-      </div>
 
-      <div className="st">
-        <div className="st-k flex items-center gap-1.5 text-[var(--live)]">
-          <span className="w-1.5 h-1.5 rounded-full bg-[var(--live)] animate-pulse" />
-          Cleared The Falls
+        <div className="st">
+          <div className="st-k">cleared the falls</div>
+          <div className="st-v" id="tPass" style={{ color: 'var(--live)' }}>
+            {tally.pass.toLocaleString('en-US')}
+          </div>
+          <div className="st-d">Reached $30K</div>
         </div>
-        <div className="st-v" style={{ color: 'var(--live)' }}>
-          {tally.pass.toLocaleString('en-US')}
-        </div>
-        <div className="st-d font-mono text-xs opacity-75">Positive class (reached ≥ $30K)</div>
-      </div>
 
-      <div className="st">
-        <div className="st-k flex items-center gap-1.5 text-[var(--stall)]">
-          <span className="w-1.5 h-1.5 rounded-full bg-[var(--stall)]" />
-          Held Below
+        <div className="st">
+          <div className="st-k">held below</div>
+          <div className="st-v" id="tStall">
+            {tally.stall.toLocaleString('en-US')}
+          </div>
+          <div className="st-d">Below $30K after 48 hours</div>
         </div>
-        <div className="st-v" style={{ color: 'var(--stall)' }}>
-          {tally.stall.toLocaleString('en-US')}
-        </div>
-        <div className="st-d font-mono text-xs opacity-75">Negative class (mandek after 48h)</div>
-      </div>
 
-      <div className="st">
-        <div className="st-k flex items-center gap-1.5 text-[var(--violet)]">
-          <span className="w-1.5 h-1.5 rounded-full bg-[var(--violet)]" />
-          Hourly Model Runs
-        </div>
-        <div className="st-v" style={{ color: 'var(--violet)' }}>
-          {model.run_id ? `#${model.run_id}` : (medianHolders ? medianHolders.toLocaleString('en-US') : '—')}
-        </div>
-        <div className="st-d font-mono text-xs opacity-75">
-          {model.run_id ? 'Stratified 5-fold CV' : 'Median 48h holders'}
+        <div className="st">
+          <div className="st-k">median holders</div>
+          <div className="st-v" id="tMed">
+            {medianHolders != null ? medianHolders.toLocaleString('en-US') : '—'}
+          </div>
+          <div className="st-d">Sampled once at 48 hours</div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
+
