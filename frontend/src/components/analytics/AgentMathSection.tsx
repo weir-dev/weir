@@ -135,7 +135,7 @@ export const AgentMathSection: React.FC<{ showMasthead?: boolean }> = ({ showMas
               How an autonomous agent decides.
             </h2>
             <p className="text-[var(--dim)] text-[14px] max-w-[58ch] mx-auto mt-3 leading-relaxed">
-              No human picks the launch. Epoch Labs observes, learns, proves and acts in a closed loop, and every step reduces to a single line you can check.
+              No human picks the launch. WEIR observes, learns, proves and acts in a closed loop, and every step reduces to a single line you can check.
             </p>
 
             <div className="math-hero relative mt-9 mx-auto max-w-[760px] py-7 px-6 border-y border-[var(--border-strong)] text-[var(--fg-hi)]">

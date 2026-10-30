@@ -4,14 +4,6 @@ export const WEIR_SYMBOL = '$WEIR';
 export const WEIR_CHAIN = 'Solana Mainnet';
 export const NETWORK = 'mainnet';
 
-// Backward compatibility aliases
-export const EPOCH_CONTRACT_ADDRESS = WEIR_CONTRACT_ADDRESS;
-export const EPOCH_SYMBOL = WEIR_SYMBOL;
-export const EPOCH_CHAIN = WEIR_CHAIN;
-export const EMILE_CONTRACT_ADDRESS = WEIR_CONTRACT_ADDRESS;
-export const EMILE_SYMBOL = WEIR_SYMBOL;
-export const EMILE_CHAIN = WEIR_CHAIN;
-
 export const getApiBaseUrl = (): string => {
   const url =
     process.env.NEXT_PUBLIC_API_BASE_URL ||

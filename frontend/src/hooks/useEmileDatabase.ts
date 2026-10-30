@@ -8,10 +8,6 @@ export function useEmileDatabase() {
   const setSimParams = useEmileStore((state) => state.setSimParams);
   const setConnected = useEmileStore((state) => state.setConnected);
   const setThresholds = useEmileStore((state) => state.setThresholds);
-  const onEpochEvent = useEmileStore((state) => state.onEpochEvent);
-  const requestEpochsRefresh = useEmileStore((state) => state.requestEpochsRefresh);
-  const onDeskEvent = useEmileStore((state) => state.onDeskEvent);
-  const onGfEvent = useEmileStore((state) => state.onGfEvent);
 
   useEffect(() => {
     const apiBase = getApiBaseUrl();
@@ -44,7 +40,7 @@ export function useEmileDatabase() {
             lore: t.lore || 'No lore description provided.',
             lore_withheld: t.lore_withheld || false,
             logo: t.logo || t.image_url,
-            holders: t.holders_48h ?? t.holders ?? null, // null = not sampled yet (sampled at 48h)
+            holders: t.holders_48h ?? t.holders ?? null,
             peak_mc: t.peak_mc || 10500,
             status: ((t.label === 'cleared' || t.status === 'passed' || (t.peak_mc && t.peak_mc >= 30000)) ? 'passed' : (t.label === 'held' || t.status === 'stalled') ? 'stalled' : 'pending') as 'passed' | 'stalled' | 'pending',
             hour: t.hour ?? t.launch_hour ?? (t.entered_at || t.launched_at ? new Date(t.entered_at || t.launched_at).getUTCHours() : 4),
@@ -115,37 +111,32 @@ export function useEmileDatabase() {
     }
 
     fetchStateFromDB();
-    const pollTimer = setInterval(fetchStateFromDB, 20000);
 
-    // 2. Connect to WebSocket stream for live events
+    // 2. Poll fallback every 15s to match server-side cache
+    const pollTimer = setInterval(fetchStateFromDB, 15000);
+
+    // 3. Connect WebSocket for live events
     let socket: WebSocket | null = null;
     try {
       socket = new WebSocket(`${wsBase}/stream`);
-      socket.onopen = () => setConnected(true);
-      socket.onclose = () => setConnected(false);
-      socket.onerror = () => setConnected(false);
+
+      socket.onopen = () => {
+        setConnected(true);
+      };
+
+      socket.onclose = () => {
+        setConnected(false);
+      };
+
+      socket.onerror = () => {
+        setConnected(false);
+      };
+
       socket.onmessage = (event) => {
         try {
           const payload = JSON.parse(event.data);
 
-          // Handle WEIR event types: entered, cleared, held, counters, model
-          if (payload.type === 'entered' || payload.type === 'cleared' || payload.type === 'held') {
-            const raw = payload.data || payload.token || payload;
-            const newItem: TokenItem = {
-              mint: raw.mint,
-              name: raw.name || 'Solana Token',
-              symbol: raw.symbol || (raw.mint ? raw.mint.slice(0, 6).toUpperCase() : 'SOL'),
-              lore: raw.lore || 'No lore description provided.',
-              holders: raw.holders_48h ?? raw.holders ?? null,
-              peak_mc: raw.peak_mc || 10500,
-              status: payload.type === 'cleared' ? 'passed' : payload.type === 'held' ? 'stalled' : 'pending',
-              hour: raw.hour ?? new Date().getUTCHours(),
-              launched_at: raw.entered_at || raw.launched_at || new Date().toISOString()
-            };
-            addToken(newItem);
-            const curState = useEmileStore.getState();
-            setSimParams({ n: curState.tally.all });
-          } else if (payload.type === 'counters' && payload.data) {
+          if (payload.type === 'counters') {
             const c = payload.data;
             useEmileStore.setState((state) => ({
               tally: {
@@ -156,7 +147,6 @@ export function useEmileDatabase() {
             }));
           } else if (payload.type === 'model' && payload.data) {
             updateModel(payload.data);
-            requestEpochsRefresh();
             setSimParams({
               n: payload.data.n ?? payload.data.n_samples,
               auc: payload.data.auc ?? payload.data.auc_mean,
@@ -180,20 +170,8 @@ export function useEmileDatabase() {
             // Sync simState.n live with updated DB total
             const curState = useEmileStore.getState();
             setSimParams({ n: curState.tally.all });
-          }
-          if (payload.epoch) {
-            onEpochEvent(payload.epoch);
-          }
-          if (payload.desk_state || payload.desk_waiting || payload.desk_open || payload.desk_close) {
-            onDeskEvent(payload);
-          }
-          if (payload.gf_vote || payload.gf_phase || payload.gf_winner || payload.gf_launch || payload.gf_verdict
-              || payload.goforge_update || payload.goforge_verdict || payload.goforge_burn) {
-            onGfEvent(payload);
-          }
-          if (payload.model && payload.type !== 'model') {
+          } else if (payload.model && payload.type !== 'model') {
             updateModel(payload.model);
-            requestEpochsRefresh();
             setSimParams({
               n: payload.model.n,
               auc: payload.model.auc,
@@ -212,5 +190,5 @@ export function useEmileDatabase() {
       clearInterval(pollTimer);
       if (socket) socket.close();
     };
-  }, [addToken, updateModel, setSimParams, setConnected, setThresholds, onEpochEvent, requestEpochsRefresh, onDeskEvent, onGfEvent]);
+  }, [addToken, updateModel, setSimParams, setConnected, setThresholds]);
 }

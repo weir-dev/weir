@@ -26,10 +26,10 @@ export default function NotFound() {
               404
             </div>
             <h1 className="font-sans text-2xl md:text-3xl font-semibold text-[var(--fg-hi)] tracking-tight">
-              State Not Observed in This Epoch
+              State Not Observed in This Run
             </h1>
             <p className="text-[var(--dim)] text-sm md:text-base max-w-lg mx-auto leading-relaxed">
-              The requested address or data trajectory does not exist in our study population. The chain continues to move forward.
+              The requested address or data trajectory does not exist in the river population. The stream continues to move forward.
             </p>
           </div>
 

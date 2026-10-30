@@ -379,7 +379,7 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.25);box-shadow:0
 .xlink{display:inline-flex;align-items:center;gap:6px;color:var(--dim);font-family:var(--mono);text-decoration:none;transition:color .2s}
 .xlink:hover{color:var(--banana)}
 
-/* ===== Mobile (same breakpoints as Epoch Labs) ===== */
+/* ===== Mobile breakpoints ===== */
 @media (max-width:980px){
   .hero-grid{grid-template-columns:minmax(0,1fr)!important}
   .screen{border-left:none!important;border-top:1px solid var(--rule)}

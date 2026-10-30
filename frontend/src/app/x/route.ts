@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation';
 
 export async function GET() {
-  redirect('https://x.com/EpochLabsHQ');
+  redirect('https://x.com/weircount');
 }

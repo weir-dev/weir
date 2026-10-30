@@ -30,6 +30,11 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       {
+        source: '/epochs/:path*',
+        destination: '/runs',
+        permanent: true,
+      },
+      {
         source: '/epochs',
         destination: '/runs',
         permanent: true,
@@ -37,6 +42,26 @@ const nextConfig: NextConfig = {
       {
         source: '/launches',
         destination: '/token',
+        permanent: true,
+      },
+      {
+        source: '/desk',
+        destination: '/window',
+        permanent: true,
+      },
+      {
+        source: '/goforge/:path*',
+        destination: '/window',
+        permanent: true,
+      },
+      {
+        source: '/goforge',
+        destination: '/window',
+        permanent: true,
+      },
+      {
+        source: '/radar',
+        destination: '/ladder',
         permanent: true,
       },
       {
