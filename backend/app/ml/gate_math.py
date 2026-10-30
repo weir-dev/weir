@@ -136,7 +136,7 @@ def evaluate_gate_level(
         "raw_jar_level": round(float(raw_gate_level), 4),
         "jar_level": round(float(gate_level), 4),
         "gates": locks,
-        "blocked_by": held_by_lock
+        "blocked_by": (None if all_passed else next((k for k in ["n_samples", "n_positive", "auc_std", "time_split"] if not locks.get(k, True)), held_by_lock))
     }
 
 # Backward compatibility alias
