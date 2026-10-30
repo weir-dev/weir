@@ -1,0 +1,29 @@
+# Upsun Configuration for WEIR Platform
+# https://docs.upsun.com
+
+applications:
+  backend:
+    source:
+      root: backend
+    type: "python:3.11"
+    
+    # Dependencies are automatically installed from backend/requirements.txt
+    build:
+      flavor: none
+
+    web:
+      commands:
+        start: "python -m app.main"
+      upstream:
+        socket_family: tcp
+        protocol: http
+
+    mounts:
+      "storage/thumbnails":
+        source: local
+        source_path: "thumbnails"
+
+routes:
+  "https://{default}/":
+    type: upstream
+    upstream: "backend:http"
