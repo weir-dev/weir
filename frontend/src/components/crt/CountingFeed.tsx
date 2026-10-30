@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { useEmileStore } from '@/store/useEmileStore';
+import { highlightCode } from '@/components/ui/codeHighlight';
 
 const CODE_BLOCKS = [
   {
@@ -143,15 +144,20 @@ export const CountingFeed: React.FC = () => {
   const currentCode = CODE_BLOCKS[blockIndex].src.slice(0, charIndex);
 
   return (
-    <div className="screen band">
+    <div className="screen band shadow-2xl rounded-xl border border-[var(--rule)] overflow-hidden">
       {/* Top Bar */}
-      <div className="scr-bar">
-        <span className={`lamp ${isConnected ? 'lamp-active bg-[var(--live)]' : 'bg-[var(--stall)]'}`} />
-        <span className="scr-title">LIVE SOLANA INGESTION STREAM</span>
-        <span className="stage">{CODE_BLOCKS[blockIndex].stage}</span>
+      <div className="scr-bar bg-gradient-to-r from-[#0E1616] via-[#121E1C] to-[#0E1616] border-b border-[var(--rule)]">
+        <span className={`lamp ${isConnected ? 'lamp-active bg-[var(--live)] shadow-[0_0_8px_var(--live)]' : 'bg-[var(--stall)] shadow-[0_0_8px_var(--stall)]'}`} />
+        <span className="scr-title tracking-wider text-[var(--live)] flex items-center gap-1.5 font-bold">
+          <span className="inline-block w-1.5 h-1.5 rounded-full bg-[var(--live)] animate-pulse" />
+          LIVE SOLANA INGESTION STREAM
+        </span>
+        <span className="stage border border-[var(--cyan)]/30 bg-[var(--cyan)]/10 text-[var(--cyan)] font-mono font-medium shadow-[0_0_10px_rgba(56,189,248,0.15)]">
+          {CODE_BLOCKS[blockIndex].stage}
+        </span>
         <button
           type="button"
-          className="pause"
+          className="pause font-mono border border-[var(--banana)]/40 text-[var(--banana)] bg-[var(--banana)]/10 hover:bg-[var(--banana)]/25 hover:text-white transition-all shadow-sm"
           onClick={() => setPaused(!paused)}
           aria-pressed={paused}
         >
@@ -159,19 +165,20 @@ export const CountingFeed: React.FC = () => {
         </button>
       </div>
 
-      {/* Code Terminal Box */}
-      <div className="code" ref={codeRef}>
-        <pre style={{ margin: 0, font: 'inherit', color: 'inherit' }}>
-          {currentCode}
-          {!paused && <span className="cur" />}
-        </pre>
-      </div>
+      {/* Code Terminal Box with Colorful Syntax */}
+      <div 
+        className="code flex-1 min-h-[236px] max-h-[236px] overflow-hidden p-3.5 px-4.5 font-mono text-[11px] leading-relaxed whitespace-pre-wrap break-words text-[var(--fg)] relative z-2 bg-[#091010]/95"
+        ref={codeRef}
+        dangerouslySetInnerHTML={{ 
+          __html: highlightCode(currentCode) + (!paused ? '<span class="cur"></span>' : '') 
+        }}
+      />
 
       {/* Pull / Ingestion Metrics */}
-      <div className="pull">
-        <span>Entered River: <b style={{ color: 'var(--live)' }}>{tally.all.toLocaleString('en-US')}</b></span>
-        <span>Price Updates: <b style={{ color: 'var(--live)' }}>{counters.dex.toLocaleString('en-US')}</b></span>
-        <span>Holder Accounts: <b style={{ color: 'var(--live)' }}>{counters.rpc.toLocaleString('en-US')}</b></span>
+      <div className="pull bg-[#0D1514] border-t border-b border-[var(--rule)]">
+        <span>Entered River: <b className="text-[var(--cyan)] font-bold text-shadow-sm">{tally.all.toLocaleString('en-US')}</b></span>
+        <span>Price Updates: <b className="text-[var(--live)] font-bold text-shadow-sm">{counters.dex.toLocaleString('en-US')}</b></span>
+        <span>Holder Accounts: <b className="text-[var(--violet)] font-bold text-shadow-sm">{counters.rpc.toLocaleString('en-US')}</b></span>
       </div>
 
       {/* Live Token Feed List */}

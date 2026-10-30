@@ -52,19 +52,63 @@ export default function ModelRunsPage() {
       <main className="w-full flex-1 p-4 md:p-8 space-y-8">
         <div className="lp-head">
           <div>
-            <span className="eyebrow-n"><b>04</b>Hourly Model Training</span>
-            <h2>Model <em>Runs</em> &amp; Convergence</h2>
+            <span className="eyebrow-n flex items-center gap-2"><b className="bg-[var(--banana)] text-white">04</b>Hourly Model Training</span>
+            <h2>Model <em className="text-[var(--banana-hi)] font-bold">Runs</em> &amp; Convergence</h2>
             <p>
               LightGBM models train on the labeled Solana universe every hour. The proven floor and Four Locks are evaluated across 5-fold stratified cross-validation.
             </p>
           </div>
-          <div className="lp-tags">
-            <div className="tagbox a">
-              <span className="k2">TOTAL RUNS:</span>
-              <b>{runs.length || (latestModel.run_id ? 1 : 0)}</b>
+          {/* Right Side Telemetry Card to fill space */}
+          <div className="rounded-xl border border-[var(--rule)] bg-[var(--panel2)]/90 backdrop-blur-md p-4 shadow-lg flex flex-col gap-3 min-w-[280px] sm:min-w-[340px] max-w-[420px] w-full md:w-auto">
+            {/* Header row: Live Status pill + Engine title */}
+            <div className="flex items-center justify-between gap-3 border-b border-[var(--soft)] pb-2.5">
+              <div className="flex items-center gap-2">
+                <span className="relative flex h-2.5 w-2.5">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--violet)] opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[var(--violet)]"></span>
+                </span>
+                <span className="font-mono text-xs font-bold tracking-wider text-[var(--fg-hi)] uppercase">
+                  Training Cadence
+                </span>
+              </div>
+              <span className="font-mono text-[10px] px-2 py-0.5 rounded bg-[var(--violet)]/15 text-[var(--violet)] border border-[var(--violet)]/30 font-bold">
+                HOURLY CYCLE
+              </span>
             </div>
-            <div className="tagbox b">
-              PROVEN FLOOR: {latestModel.proven_floor ? latestModel.proven_floor.toFixed(3) : '0.500'}
+
+            {/* Metrics 2x2 grid */}
+            <div className="grid grid-cols-2 gap-2 font-mono text-xs">
+              <div className="p-2 rounded-lg bg-[var(--panel)] border border-[var(--soft)]">
+                <div className="text-[10px] uppercase text-[var(--dim)]">Convergence Floor</div>
+                <div className="text-[var(--banana)] font-bold mt-0.5">
+                  {latestModel.proven_floor ? latestModel.proven_floor.toFixed(3) : '0.500'} / 0.600
+                </div>
+              </div>
+              <div className="p-2 rounded-lg bg-[var(--panel)] border border-[var(--soft)]">
+                <div className="text-[10px] uppercase text-[var(--dim)]">Measured AUC</div>
+                <div className="text-[var(--cyan)] font-bold mt-0.5">
+                  {latestModel.auc ? latestModel.auc.toFixed(4) : 'Measuring…'}
+                </div>
+              </div>
+              <div className="p-2 rounded-lg bg-[var(--panel)] border border-[var(--soft)]">
+                <div className="text-[10px] uppercase text-[var(--dim)]">Lookahead Guard</div>
+                <div className="text-[var(--live)] font-bold mt-0.5">gap ≤ 0.04</div>
+              </div>
+              <div className="p-2 rounded-lg bg-[var(--panel)] border border-[var(--soft)]">
+                <div className="text-[10px] uppercase text-[var(--dim)]">Lock Verification</div>
+                <div className="text-[var(--fg-hi)] font-bold mt-0.5">Four Locks Active</div>
+              </div>
+            </div>
+
+            {/* Bottom Row: Total runs + Proven floor badge */}
+            <div className="flex items-center justify-between gap-2 pt-1 border-t border-[var(--soft)]">
+              <div className="tagbox a border-[var(--cyan)]/30 bg-[var(--cyan)]/10 text-[var(--cyan)] py-1 px-3 text-[11px] font-mono">
+                <span className="k2">TOTAL RUNS:</span>
+                <b>{runs.length || (latestModel.run_id ? 1 : 0)}</b>
+              </div>
+              <div className="tagbox b bg-[var(--live)]/15 border border-[var(--live)]/40 text-[var(--live)] py-1 px-3 text-[11px] font-bold shadow-[0_0_10px_rgba(16,185,129,0.2)] font-mono">
+                TARGET: 0.600
+              </div>
             </div>
           </div>
         </div>

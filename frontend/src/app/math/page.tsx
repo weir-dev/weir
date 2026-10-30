@@ -31,17 +31,6 @@ const CHAPTERS = [
   { n: '∑', label: 'Symbols', href: '#symbols' },
 ];
 
-// Faint symbols drifting behind the hero.
-const GLYPHS = [
-  { t: String.raw`\sum`, x: '6%', y: '18%', s: '3.2rem', d: '0s' },
-  { t: String.raw`\varepsilon`, x: '18%', y: '72%', s: '2.6rem', d: '1.2s' },
-  { t: String.raw`\sigma(\cdot)`, x: '34%', y: '10%', s: '1.8rem', d: '2.1s' },
-  { t: String.raw`\int`, x: '48%', y: '78%', s: '3.4rem', d: '0.6s' },
-  { t: String.raw`\hat p`, x: '58%', y: '16%', s: '2.2rem', d: '1.8s' },
-  { t: String.raw`\nabla\mathcal{L}`, x: '28%', y: '44%', s: '1.6rem', d: '2.6s' },
-  { t: String.raw`\delta`, x: '8%', y: '52%', s: '2rem', d: '3s' },
-];
-
 const SYMBOLS: [string, string][] = [
   [String.raw`n,\ n_{+}`, 'Labelled tokens, and how many of them reached $30K'],
   [String.raw`\bar P_i`, 'Peak market cap of token i'],
@@ -76,18 +65,6 @@ export default function MathPage() {
 
       {/* Hero */}
       <section className="relative overflow-hidden border-b border-[var(--rule)] tex-diagonal">
-        <div aria-hidden className="absolute inset-0 pointer-events-none select-none">
-          {GLYPHS.map((g) => (
-            <span
-              key={g.t}
-              className="math-glyph absolute text-[var(--banana)]"
-              style={{ left: g.x, top: g.y, fontSize: g.s, animationDelay: g.d }}
-            >
-              <Tex>{g.t}</Tex>
-            </span>
-          ))}
-        </div>
-
         <div className="relative grid grid-cols-1 lg:grid-cols-[1.4fr_1fr] gap-10 items-center px-6 md:px-12 py-14 md:py-20">
           <div>
             <div className="font-mono text-[10.5px] uppercase tracking-[0.3em] text-[var(--banana)] flex items-center gap-3">

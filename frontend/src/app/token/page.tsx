@@ -41,15 +41,52 @@ export default function WeirTokenPage() {
               $WEIR does not launch on a schedule. The river gate only opens when the proven floor clears ROC-AUC 0.60 and all Four Locks are verified.
             </p>
           </div>
-          <div className="lp-tags">
-            <div className="tagbox a">
-              <span className="k2">STATUS:</span>
-              <b style={{ color: isUnlocked ? 'var(--live)' : 'var(--banana)' }}>
-                {isUnlocked ? 'GATE OPEN' : 'LOCKED BY PROOF'}
-              </b>
+          {/* Right Side Telemetry Card to fill space */}
+          <div className="rounded-xl border border-[var(--rule)] bg-[var(--panel2)]/90 backdrop-blur-md p-4 shadow-lg flex flex-col gap-3 min-w-[280px] sm:min-w-[340px] max-w-[420px] w-full md:w-auto">
+            <div className="flex items-center justify-between gap-3 border-b border-[var(--soft)] pb-2.5">
+              <div className="flex items-center gap-2">
+                <span className="relative flex h-2.5 w-2.5">
+                  <span className={`animate-ping absolute inline-flex h-full w-full rounded-full ${isUnlocked ? 'bg-[var(--live)]' : 'bg-[var(--banana)]'} opacity-75`}></span>
+                  <span className={`relative inline-flex rounded-full h-2.5 w-2.5 ${isUnlocked ? 'bg-[var(--live)]' : 'bg-[var(--banana)]'}`}></span>
+                </span>
+                <span className="font-mono text-xs font-bold tracking-wider text-[var(--fg-hi)] uppercase">
+                  Launch Gate Barrier
+                </span>
+              </div>
+              <span className={`font-mono text-[10px] px-2 py-0.5 rounded ${isUnlocked ? 'bg-[var(--live)]/15 text-[var(--live)] border-[var(--live)]/30' : 'bg-[var(--banana)]/15 text-[var(--banana)] border-[var(--banana)]/30'} border font-bold`}>
+                {isUnlocked ? 'GATE OPEN' : 'STRICT BARRIER'}
+              </span>
             </div>
-            <div className="tagbox b">
-              WATER LEVEL: {gateLevelPct.toFixed(1)}%
+
+            <div className="grid grid-cols-2 gap-2 font-mono text-xs">
+              <div className="p-2 rounded-lg bg-[var(--panel)] border border-[var(--soft)]">
+                <div className="text-[10px] uppercase text-[var(--dim)]">Proven Floor</div>
+                <div className="text-[var(--banana)] font-bold mt-0.5">
+                  {(model.proven_floor || 0.5).toFixed(3)} / 0.600
+                </div>
+              </div>
+              <div className="p-2 rounded-lg bg-[var(--panel)] border border-[var(--soft)]">
+                <div className="text-[10px] uppercase text-[var(--dim)]">Four Locks</div>
+                <div className="text-[var(--live)] font-bold mt-0.5">4 Hard Gates</div>
+              </div>
+              <div className="p-2 rounded-lg bg-[var(--panel)] border border-[var(--soft)]">
+                <div className="text-[10px] uppercase text-[var(--dim)]">Network</div>
+                <div className="text-[var(--violet)] font-bold mt-0.5">Solana SPL</div>
+              </div>
+              <div className="p-2 rounded-lg bg-[var(--panel)] border border-[var(--soft)]">
+                <div className="text-[10px] uppercase text-[var(--dim)]">Launch Model</div>
+                <div className="text-[var(--cyan)] font-bold mt-0.5">100% Fair Proof</div>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-between gap-2 pt-1 border-t border-[var(--soft)]">
+              <div className="tagbox a border-[var(--banana)]/30 bg-[var(--banana)]/10 text-[var(--banana)] py-1 px-3 text-[11px] font-mono">
+                <span className="k2">STATUS:</span>
+                <b>{isUnlocked ? 'GATE OPEN' : 'LOCKED BY PROOF'}</b>
+              </div>
+              <div className="tagbox b bg-[var(--live)]/15 border border-[var(--live)]/40 text-[var(--live)] py-1 px-3 text-[11px] font-bold shadow-[0_0_10px_rgba(16,185,129,0.2)] font-mono">
+                WATER LEVEL: {gateLevelPct.toFixed(1)}%
+              </div>
             </div>
           </div>
         </div>

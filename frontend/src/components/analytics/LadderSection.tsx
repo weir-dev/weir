@@ -59,7 +59,13 @@ export const LadderSection: React.FC = () => {
     name_tokens: 'Token Name Token Complexity',
   };
 
-  const colors = ['var(--fg-hi)', 'var(--live)', 'var(--banana-hi)', 'var(--cyan)', 'var(--stall)'];
+  const colors = [
+    'linear-gradient(90deg, #10B981, #34D399)',
+    'linear-gradient(90deg, #FC6423, #FBBF24)',
+    'linear-gradient(90deg, #06B6D4, #38BDF8)',
+    'linear-gradient(90deg, #8B5CF6, #C084FC)',
+    'linear-gradient(90deg, #F43F5E, #FB7185)',
+  ];
   const fi = model.feature_importance || {};
   const topFeatures = Object.entries(fi)
     .sort((a, b) => b[1] - a[1])
@@ -70,68 +76,107 @@ export const LadderSection: React.FC = () => {
     <section className="lp" id="ladder">
       <div className="lp-head">
         <div>
-          <span className="eyebrow-n"><b>01</b>Continuous learning progress</span>
-          <h2>Active model weights &amp; <em>validation</em></h2>
+          <span className="eyebrow-n flex items-center gap-2"><b className="bg-[var(--banana)] text-white">01</b>Continuous learning progress</span>
+          <h2>Active model weights &amp; <em className="text-[var(--banana-hi)] font-bold">validation</em></h2>
           <p>
             Real-time aggregate data collected across Solana. Machine learning weights update continuously as token market caps cross established evaluation thresholds.
           </p>
         </div>
-        <div className="lp-tags">
-          <div className="tagbox a">
-            <span className="k2">PHASE:</span>
-            <b>1 · INGESTION</b>
+        {/* Right Side Telemetry Card to fill space */}
+        <div className="rounded-xl border border-[var(--rule)] bg-[var(--panel2)]/90 backdrop-blur-md p-4 shadow-lg flex flex-col gap-3 min-w-[280px] sm:min-w-[340px] max-w-[420px] w-full md:w-auto">
+          {/* Header row: Live Status pill + Engine title */}
+          <div className="flex items-center justify-between gap-3 border-b border-[var(--soft)] pb-2.5">
+            <div className="flex items-center gap-2">
+              <span className="relative flex h-2.5 w-2.5">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--live)] opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[var(--live)]"></span>
+              </span>
+              <span className="font-mono text-xs font-bold tracking-wider text-[var(--fg-hi)] uppercase">
+                ML Validation Engine
+              </span>
+            </div>
+            <span className="font-mono text-[10px] px-2 py-0.5 rounded bg-[var(--live)]/15 text-[var(--live)] border border-[var(--live)]/30 font-bold">
+              ONLINE
+            </span>
           </div>
-          <div className="tagbox b">
-            WATER LEVEL {gateLevelPct !== '—' ? `${gateLevelPct}%` : '—'}
+
+          {/* Metrics 2x2 grid */}
+          <div className="grid grid-cols-2 gap-2 font-mono text-xs">
+            <div className="p-2 rounded-lg bg-[var(--panel)] border border-[var(--soft)]">
+              <div className="text-[10px] uppercase text-[var(--dim)]">Cross-Validation</div>
+              <div className="text-[var(--violet)] font-bold mt-0.5">5-Fold Stratified</div>
+            </div>
+            <div className="p-2 rounded-lg bg-[var(--panel)] border border-[var(--soft)]">
+              <div className="text-[10px] uppercase text-[var(--dim)]">Target Class</div>
+              <div className="text-[var(--live)] font-bold mt-0.5">Peak MC ≥ $30K</div>
+            </div>
+            <div className="p-2 rounded-lg bg-[var(--panel)] border border-[var(--soft)]">
+              <div className="text-[10px] uppercase text-[var(--dim)]">VC Penalty (ε)</div>
+              <div className="text-[var(--cyan)] font-bold mt-0.5">{modelLoaded ? (model.epsilon_vc || 0).toFixed(3) : 'Bound d=37'}</div>
+            </div>
+            <div className="p-2 rounded-lg bg-[var(--panel)] border border-[var(--soft)]">
+              <div className="text-[10px] uppercase text-[var(--dim)]">Launch Target</div>
+              <div className="text-[var(--banana)] font-bold mt-0.5">AUC Floor ≥ 0.60</div>
+            </div>
+          </div>
+
+          {/* Bottom Row: Phase tag + Water Level Progress */}
+          <div className="flex items-center justify-between gap-2 pt-1 border-t border-[var(--soft)]">
+            <div className="tagbox a border-[var(--cyan)]/30 bg-[var(--cyan)]/10 text-[var(--cyan)] py-1 px-3 text-[11px] font-mono">
+              <span className="k2">PHASE:</span>
+              <b>1 · INGESTION</b>
+            </div>
+            <div className="tagbox b bg-[var(--live)]/15 border border-[var(--live)]/40 text-[var(--live)] py-1 px-3 text-[11px] font-bold shadow-[0_0_10px_rgba(16,185,129,0.2)] font-mono">
+              GATE {gateLevelPct !== '—' ? `${gateLevelPct}%` : '—'}
+            </div>
           </div>
         </div>
       </div>
 
       {/* 4 Overview Metric Cards */}
       <div className="g4">
-        <div className="mc tex">
+        <div className="mc tex border-t-2 border-t-[var(--cyan)] hover:shadow-[0_0_16px_rgba(56,189,248,0.2)]">
           <div className="mc-top">
-            <span className="mc-k">Total Tokens Counted</span>
-            <span className="mc-t" style={{ background: 'var(--panel2)', color: 'var(--banana)', border: '1px solid color-mix(in srgb, var(--banana) 30%, transparent)' }}>
+            <span className="mc-k text-[var(--cyan)]">Total Tokens Counted</span>
+            <span className="mc-t bg-[var(--cyan)]/15 text-[var(--cyan)] border border-[var(--cyan)]/30 font-bold">
               LIVE SCAN
             </span>
           </div>
-          <div className="mc-v">{tally.all.toLocaleString('en-US')}</div>
+          <div className="mc-v text-[var(--cyan)]">{tally.all.toLocaleString('en-US')}</div>
           <div className="mc-f">
             <span>Entry Threshold:</span>
-            <b>&gt; $10K Peak MC</b>
+            <b className="text-[var(--cyan)]">&gt; $10K Peak MC</b>
           </div>
         </div>
 
-        <div className="mc tex">
+        <div className="mc tex border-t-2 border-t-[var(--live)] hover:shadow-[0_0_16px_rgba(16,185,129,0.2)]">
           <div className="mc-top">
-            <span className="mc-k">Class Distribution</span>
-            <span className="mc-t" style={{ background: 'color-mix(in srgb, var(--live) 15%, transparent)', color: 'var(--live)' }}>
+            <span className="mc-k text-[var(--live)]">Class Distribution</span>
+            <span className="mc-t bg-[var(--live)]/15 text-[var(--live)] border border-[var(--live)]/30 font-bold">
               {clearRate}% Clear Rate
             </span>
           </div>
           <div style={{ display: 'flex', alignItems: 'baseline', gap: '12px', marginTop: '8px' }}>
             <span className="mc-v" style={{ margin: 0, color: 'var(--live)' }}>{tally.pass.toLocaleString('en-US')}</span>
-            <span className="mono" style={{ fontSize: '14px', color: 'var(--dim)' }}>cleared $30K</span>
-            <span className="mono" style={{ fontSize: '12px', color: 'var(--stall)', marginLeft: 'auto', fontWeight: 500 }}>
+            <span className="mono" style={{ fontSize: '13px', color: 'var(--live)', opacity: 0.85 }}>cleared $30K</span>
+            <span className="mono" style={{ fontSize: '12px', color: 'var(--stall)', marginLeft: 'auto', fontWeight: 600 }}>
               {tally.stall.toLocaleString('en-US')} held
             </span>
           </div>
-          <div className="minibar">
-            <i style={{ display: 'block', height: '100%', width: `${clearRate}%`, background: 'var(--live)', transition: 'width .5s' }} />
-            <i style={{ display: 'block', height: '100%', flex: 1, background: 'var(--stall)', opacity: 0.7 }} />
+          <div className="minibar overflow-hidden rounded-full bg-[var(--stall)]/30 mt-2">
+            <i style={{ display: 'block', height: '100%', width: `${clearRate}%`, background: 'var(--live)', boxShadow: '0 0 8px var(--live)', transition: 'width .5s' }} />
           </div>
         </div>
 
-        <div className="mc tex">
+        <div className="mc tex border-t-2 border-t-[var(--violet)] hover:shadow-[0_0_16px_rgba(192,132,252,0.2)]">
           <div className="mc-top">
-            <span className="mc-k">Model Accuracy &amp; Proven Floor</span>
-            <span className="mc-t" style={{ background: 'color-mix(in srgb, var(--cyan) 15%, transparent)', color: 'var(--cyan)' }}>
+            <span className="mc-k text-[var(--violet)]">Model Accuracy &amp; Floor</span>
+            <span className="mc-t bg-[var(--violet)]/15 text-[var(--violet)] border border-[var(--violet)]/30 font-bold">
               ROC-AUC
             </span>
           </div>
           <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px', marginTop: '8px' }}>
-            <span className="mc-v" style={{ margin: 0, color: 'var(--cyan)' }}>
+            <span className="mc-v" style={{ margin: 0, color: 'var(--violet)' }}>
               {modelLoaded ? (model.auc || 0).toFixed(4) : '—'}
             </span>
             <span className="mono" style={{ fontSize: '12px', color: 'var(--dim)' }}>Measured</span>
@@ -144,14 +189,14 @@ export const LadderSection: React.FC = () => {
           </div>
         </div>
 
-        <div className="mc tex">
+        <div className="mc tex border-t-2 border-t-[var(--banana)] hover:shadow-[0_0_16px_rgba(252,100,35,0.2)]">
           <div className="mc-top">
-            <span className="mc-k">Feature Dimension Vector</span>
-            <span className="mc-t" style={{ background: 'color-mix(in srgb, var(--violet) 15%, transparent)', color: 'var(--violet)' }}>
+            <span className="mc-k text-[var(--banana)]">Feature Dimension Vector</span>
+            <span className="mc-t bg-[var(--banana)]/15 text-[var(--banana)] border border-[var(--banana)]/30 font-bold">
               d = {model.d || 37}
             </span>
           </div>
-          <div className="mc-v" style={{ color: 'var(--violet)' }}>
+          <div className="mc-v" style={{ color: 'var(--banana)' }}>
             {model.d || 37}
             <span style={{ fontSize: '15px', letterSpacing: 0, fontWeight: 400, color: 'var(--dim)', marginLeft: '10px' }}>
               signal parameters
@@ -159,7 +204,7 @@ export const LadderSection: React.FC = () => {
           </div>
           <div className="mc-f">
             <span>Evaluation Window:</span>
-            <b>Launch Hour 0 – 24 UTC</b>
+            <b className="text-[var(--banana)]">Launch Hour 0 – 24 UTC</b>
           </div>
         </div>
       </div>
@@ -255,12 +300,15 @@ export const LadderSection: React.FC = () => {
               </svg>
               Model Validation &amp; Four Locks Status
             </h3>
-            <div className="gates">
+            <div className="gates flex flex-col gap-2">
               {lockList.map((lock, i) => (
-                <div key={i} className="gate">
-                  <div className="gl">Lock {i + 1} · {lock.name}</div>
-                  <div className="gf">
-                    <span className="gv">{lock.val}</span>
+                <div key={i} className={`gate p-2.5 rounded-lg border transition-all ${lock.ok ? 'border-emerald-500/30 bg-emerald-500/5' : 'border-orange-500/25 bg-orange-500/5'}`}>
+                  <div className="gl font-medium text-xs flex items-center gap-1.5">
+                    <span className={`w-1.5 h-1.5 rounded-full ${lock.ok ? 'bg-[var(--live)]' : 'bg-[var(--banana)]'}`} />
+                    Lock {i + 1} · {lock.name}
+                  </div>
+                  <div className="gf flex items-center justify-between mt-1">
+                    <span className="gv font-mono font-semibold text-xs" style={{ color: lock.ok ? 'var(--live)' : 'var(--banana)' }}>{lock.val}</span>
                     <span className={`gpill ${lock.ok ? 'ok' : 'wip pulse'}`}>
                       {lock.ok ? '✓ OPEN' : '● HOLDING'}
                     </span>

@@ -1,3 +1,4 @@
+from typing import Literal, Optional
 from fastapi import APIRouter, Query, HTTPException, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, desc
@@ -57,7 +58,7 @@ async def get_twitter_status(db: AsyncSession = Depends(get_db)):
     }
 
 @router.get("/preview")
-async def get_tweet_preview(target_token: str = Query("emile", enum=["emile", "emile_banana"])):
+async def get_tweet_preview(target_token: Literal["emile", "emile_banana"] = "emile"):
     """
     Fetches real live DEX stats and returns formatted factual tweet preview.
     """
@@ -75,7 +76,7 @@ async def get_tweet_preview(target_token: str = Query("emile", enum=["emile", "e
 
 @router.post("/post-news-now")
 async def trigger_news_post(
-    target_token: str = Query(None, enum=["emile", "emile_banana"]),
+    target_token: Optional[Literal["emile", "emile_banana"]] = None,
     force: bool = Query(False, description="Bypass minimum cooldown timer if true")
 ):
     """
