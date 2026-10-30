@@ -12,6 +12,12 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-EXPOSE 8000
+# Hugging Face Spaces standard: Port 7860 & User UID 1000
+ENV PORT=7860
+EXPOSE 7860
+
+RUN useradd -m -u 1000 user && \
+    chown -R user:user /app
+USER user
 
 CMD ["python", "-m", "app.main"]
