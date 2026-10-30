@@ -286,30 +286,46 @@ function computeSynchronizedModel({
   };
 }
 
+let cachedDbResponse: any = null;
+let lastDbResponseTime = 0;
+const DB_CACHE_TTL_MS = 6000; // 6 seconds memory cache
+
 export async function GET() {
+  const now = Date.now();
+  if (cachedDbResponse && now - lastDbResponseTime < DB_CACHE_TTL_MS) {
+    return NextResponse.json(cachedDbResponse, {
+      headers: {
+        'Cache-Control': 'public, s-maxage=5, stale-while-revalidate=15',
+        'Content-Type': 'application/json',
+      },
+    });
+  }
+
   const db = getDb();
   if (db) {
     try {
-      const [counts] = await db`
-        SELECT 
-          COUNT(*)::int as total,
-          COUNT(*) FILTER (WHERE label = 'cleared' OR status = 'passed')::int as cleared,
-          COUNT(*) FILTER (WHERE label = 'held' OR status = 'stalled')::int as held
-        FROM tokens;
-      `;
-      const dbTokens = await db`
-        SELECT 
-          mint, name, symbol, lore, lore_display, lore_withheld,
-          image_url, creator, chain, launchpad, launched_at, entered_at,
-          peak_mc, last_seen_mc, holders, holders_48h, label, status,
-          launch_hour_utc as hour
-        FROM tokens
-        ORDER BY first_seen_at DESC
-        LIMIT 100;
-      `;
-      const [latestModelRow] = await db`
-        SELECT * FROM model_runs ORDER BY id DESC LIMIT 1;
-      `;
+      const [[counts], dbTokens, [latestModelRow]] = await Promise.all([
+        db`
+          SELECT 
+            COUNT(*)::int as total,
+            COUNT(*) FILTER (WHERE label = 'cleared' OR status = 'passed')::int as cleared,
+            COUNT(*) FILTER (WHERE label = 'held' OR status = 'stalled')::int as held
+          FROM tokens;
+        `,
+        db`
+          SELECT 
+            mint, name, symbol, lore, lore_display, lore_withheld,
+            image_url, creator, chain, launchpad, launched_at, entered_at,
+            peak_mc, last_seen_mc, holders, holders_48h, label, status,
+            launch_hour_utc as hour
+          FROM tokens
+          ORDER BY first_seen_at DESC
+          LIMIT 100;
+        `,
+        db`
+          SELECT * FROM model_runs ORDER BY id DESC LIMIT 1;
+        `,
+      ]);
 
       const totalEntered = counts?.total || 0;
       const clearedCount = counts?.cleared || 0;
@@ -321,7 +337,7 @@ export async function GET() {
         latestModelRow,
       });
 
-      return NextResponse.json({
+      const payload = {
         status: 'online',
         chain: 'solana',
         network: 'Solana Mainnet',
@@ -356,7 +372,12 @@ export async function GET() {
         },
         target_auc: 0.60,
         floor_auc: 0.50,
-      }, {
+      };
+
+      cachedDbResponse = payload;
+      lastDbResponseTime = Date.now();
+
+      return NextResponse.json(payload, {
         headers: {
           'Cache-Control': 'public, s-maxage=5, stale-while-revalidate=15',
           'Content-Type': 'application/json',

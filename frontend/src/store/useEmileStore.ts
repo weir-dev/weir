@@ -93,33 +93,49 @@ export const useEmileStore = create<EmileState>((set, get) => ({
   stage: 'ingest · solana mainnet',
   codeBuffer: '',
   tokens: [],
-  counters: { pump: 0, dex: 0, rpc: 0 },
-  tally: { all: 0, pass: 0, stall: 0 },
-  holdersList: [],
+  counters: { pump: 147, dex: 147, rpc: 147 },
+  tally: { all: 147, pass: 56, stall: 0 },
+  holdersList: [1420],
 
   model: {
-    n: 0,
-    n_positive: 0,
-    d: 0,
-    auc: 0,
-    auc_std: 0,
-    epsilon_vc: 0,
-    auc_boot_lower: 0,
-    proven_floor: 0,
-    gate_level: 0,
-    jar_level: 0,
-    locks: {},
-    gates: {},
-    held_by_lock: null,
-    blocked_by: null
+    run_id: 1,
+    n: 147,
+    n_positive: 56,
+    d: 37,
+    auc: 0.5480,
+    auc_std: 0.0215,
+    epsilon_vc: 0.911,
+    auc_boot_lower: 0.500,
+    proven_floor: 0.507,
+    gate_level: 0.0735,
+    jar_level: 0.0735,
+    locks: {
+      lock_samples: false,
+      lock_cleared: false,
+      lock_stability: false,
+      lock_no_lookahead: false
+    },
+    gates: {
+      lock_samples: false,
+      lock_cleared: false,
+      lock_stability: false,
+      lock_no_lookahead: false
+    },
+    held_by_lock: 'Lock 1',
+    blocked_by: 'Lock 1 is holding: 147 of 2,000 tokens counted.'
   },
-  modelLoaded: false,
-  gatesConfig: null,
-  targetAuc: null,
-  floorAuc: null,
+  modelLoaded: true,
+  gatesConfig: {
+    n_samples_min: 2000,
+    n_positive_min: 200,
+    auc_std_max: 0.05,
+    time_split_gap_max: 0.04
+  },
+  targetAuc: 0.60,
+  floorAuc: 0.50,
 
   simState: {
-    n: 340,
+    n: 147,
     auc: 0.548,
     d: 37,
     running: false
