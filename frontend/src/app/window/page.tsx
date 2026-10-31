@@ -45,50 +45,37 @@ export default function CountingWindowPage() {
               Every Solana token that touches $10K peak market cap enters the river. We monitor each token continuously until it clears $30K or stalls past 48 hours.
             </p>
           </div>
-          {/* Right Side Telemetry Card to fill space */}
-          <div className="rounded-xl border border-[var(--rule)] bg-[var(--panel2)]/90 backdrop-blur-md p-4 shadow-lg flex flex-col gap-3 min-w-[280px] sm:min-w-[340px] max-w-[420px] w-full md:w-auto">
-            <div className="flex items-center justify-between gap-3 border-b border-[var(--soft)] pb-2.5">
-              <div className="flex items-center gap-2">
-                <span className="relative flex h-2.5 w-2.5">
+          {/* Right Side 3D Fish Themed Card */}
+          <div className="relative group overflow-hidden rounded-2xl border border-[var(--rule)] shadow-xl bg-[var(--panel2)] min-w-[280px] sm:min-w-[340px] max-w-[420px] w-full md:w-auto h-[180px] sm:h-[195px] flex items-center justify-center flex-shrink-0">
+            <img
+              src="/brand/kip-counting-3d.jpg"
+              alt="Kip the Salmon Counting Window Observation Deck"
+              className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/25 to-black/30 pointer-events-none" />
+
+            {/* Floating Top Badges */}
+            <div className="absolute top-3 left-3 right-3 flex items-center justify-between pointer-events-none">
+              <span className="font-mono text-[10.5px] font-bold px-2.5 py-1 rounded-full bg-black/60 backdrop-blur-md text-[var(--cyan)] border border-[var(--cyan)]/40 flex items-center gap-1.5 shadow-sm">
+                <span className="relative flex h-2 w-2">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--cyan)] opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[var(--cyan)]"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-[var(--cyan)]"></span>
                 </span>
-                <span className="font-mono text-xs font-bold tracking-wider text-[var(--fg-hi)] uppercase">
-                  Solana DEX Stream
-                </span>
-              </div>
-              <span className="font-mono text-[10px] px-2 py-0.5 rounded bg-[var(--cyan)]/15 text-[var(--cyan)] border border-[var(--cyan)]/30 font-bold">
+                SOLANA DEX STREAM
+              </span>
+              <span className="font-mono text-[9.5px] px-2 py-0.5 rounded bg-[var(--cyan)]/20 backdrop-blur-md text-[var(--cyan)] border border-[var(--cyan)]/40 font-bold uppercase tracking-wider">
                 POLLING 60s
               </span>
             </div>
 
-            <div className="grid grid-cols-2 gap-2 font-mono text-xs">
-              <div className="p-2 rounded-lg bg-[var(--panel)] border border-[var(--soft)]">
-                <div className="text-[10px] uppercase text-[var(--dim)]">Entry Threshold</div>
-                <div className="text-[var(--cyan)] font-bold mt-0.5">≥ $10K Peak MC</div>
-              </div>
-              <div className="p-2 rounded-lg bg-[var(--panel)] border border-[var(--soft)]">
-                <div className="text-[10px] uppercase text-[var(--dim)]">Clear Target</div>
-                <div className="text-[var(--live)] font-bold mt-0.5">≥ $30K Peak MC</div>
-              </div>
-              <div className="p-2 rounded-lg bg-[var(--panel)] border border-[var(--soft)]">
-                <div className="text-[10px] uppercase text-[var(--dim)]">Label Window</div>
-                <div className="text-[var(--stall)] font-bold mt-0.5">48 Hours Stalled</div>
-              </div>
-              <div className="p-2 rounded-lg bg-[var(--panel)] border border-[var(--soft)]">
-                <div className="text-[10px] uppercase text-[var(--dim)]">Holders Sampler</div>
-                <div className="text-[var(--violet)] font-bold mt-0.5">Helius DAS 48h</div>
-              </div>
-            </div>
-
-            <div className="flex items-center justify-between gap-2 pt-1 border-t border-[var(--soft)]">
-              <div className="tagbox a border-[var(--cyan)]/30 bg-[var(--cyan)]/10 text-[var(--cyan)] py-1 px-3 text-[11px] font-mono">
-                <span className="k2">CHAIN:</span>
-                <b>SOLANA MAINNET</b>
-              </div>
-              <div className="tagbox b bg-[var(--live)]/15 border border-[var(--live)]/40 text-[var(--live)] py-1 px-3 text-[11px] font-bold shadow-[0_0_10px_rgba(16,185,129,0.2)] font-mono">
+            {/* Bottom Info Bar */}
+            <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between pointer-events-none">
+              <span className="text-[11px] font-mono text-white/90 font-medium drop-shadow-md">
+                Fish Ladder Observation Deck
+              </span>
+              <span className="font-mono text-[10.5px] px-2.5 py-1 rounded-lg bg-black/60 backdrop-blur-md text-[var(--live)] border border-white/10 font-bold shadow-md">
                 COUNTING: {tally.all.toLocaleString('en-US')}
-              </div>
+              </span>
             </div>
           </div>
         </div>

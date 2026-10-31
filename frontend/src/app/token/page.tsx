@@ -41,52 +41,37 @@ export default function WeirTokenPage() {
               $WEIR does not launch on a schedule. The river gate only opens when the proven floor clears ROC-AUC 0.60 and all Four Locks are verified.
             </p>
           </div>
-          {/* Right Side Telemetry Card to fill space */}
-          <div className="rounded-xl border border-[var(--rule)] bg-[var(--panel2)]/90 backdrop-blur-md p-4 shadow-lg flex flex-col gap-3 min-w-[280px] sm:min-w-[340px] max-w-[420px] w-full md:w-auto">
-            <div className="flex items-center justify-between gap-3 border-b border-[var(--soft)] pb-2.5">
-              <div className="flex items-center gap-2">
-                <span className="relative flex h-2.5 w-2.5">
+          {/* Right Side 3D Fish Themed Card */}
+          <div className="relative group overflow-hidden rounded-2xl border border-[var(--rule)] shadow-xl bg-[var(--panel2)] min-w-[280px] sm:min-w-[340px] max-w-[420px] w-full md:w-auto h-[180px] sm:h-[195px] flex items-center justify-center flex-shrink-0">
+            <img
+              src="/brand/kip-gate-3d.jpg"
+              alt="Kip the Salmon at the $WEIR Token Launch Gate"
+              className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/25 to-black/30 pointer-events-none" />
+
+            {/* Floating Top Badges */}
+            <div className="absolute top-3 left-3 right-3 flex items-center justify-between pointer-events-none">
+              <span className="font-mono text-[10.5px] font-bold px-2.5 py-1 rounded-full bg-black/60 backdrop-blur-md text-[var(--banana-hi)] border border-[var(--banana)]/40 flex items-center gap-1.5 shadow-sm">
+                <span className="relative flex h-2 w-2">
                   <span className={`animate-ping absolute inline-flex h-full w-full rounded-full ${isUnlocked ? 'bg-[var(--live)]' : 'bg-[var(--banana)]'} opacity-75`}></span>
-                  <span className={`relative inline-flex rounded-full h-2.5 w-2.5 ${isUnlocked ? 'bg-[var(--live)]' : 'bg-[var(--banana)]'}`}></span>
+                  <span className={`relative inline-flex rounded-full h-2 w-2 ${isUnlocked ? 'bg-[var(--live)]' : 'bg-[var(--banana)]'}`}></span>
                 </span>
-                <span className="font-mono text-xs font-bold tracking-wider text-[var(--fg-hi)] uppercase">
-                  Launch Gate Barrier
-                </span>
-              </div>
-              <span className={`font-mono text-[10px] px-2 py-0.5 rounded ${isUnlocked ? 'bg-[var(--live)]/15 text-[var(--live)] border-[var(--live)]/30' : 'bg-[var(--banana)]/15 text-[var(--banana)] border-[var(--banana)]/30'} border font-bold`}>
+                LAUNCH GATE BARRIER
+              </span>
+              <span className={`font-mono text-[9.5px] px-2 py-0.5 rounded ${isUnlocked ? 'bg-[var(--live)]/20 text-[var(--live)] border-[var(--live)]/40' : 'bg-[var(--banana)]/20 text-[var(--banana-hi)] border-[var(--banana)]/40'} border font-bold uppercase tracking-wider backdrop-blur-md`}>
                 {isUnlocked ? 'GATE OPEN' : 'STRICT BARRIER'}
               </span>
             </div>
 
-            <div className="grid grid-cols-2 gap-2 font-mono text-xs">
-              <div className="p-2 rounded-lg bg-[var(--panel)] border border-[var(--soft)]">
-                <div className="text-[10px] uppercase text-[var(--dim)]">Proven Floor</div>
-                <div className="text-[var(--banana)] font-bold mt-0.5">
-                  {(model.proven_floor || 0.5).toFixed(3)} / 0.600
-                </div>
-              </div>
-              <div className="p-2 rounded-lg bg-[var(--panel)] border border-[var(--soft)]">
-                <div className="text-[10px] uppercase text-[var(--dim)]">Four Locks</div>
-                <div className="text-[var(--live)] font-bold mt-0.5">4 Hard Gates</div>
-              </div>
-              <div className="p-2 rounded-lg bg-[var(--panel)] border border-[var(--soft)]">
-                <div className="text-[10px] uppercase text-[var(--dim)]">Network</div>
-                <div className="text-[var(--violet)] font-bold mt-0.5">Solana SPL</div>
-              </div>
-              <div className="p-2 rounded-lg bg-[var(--panel)] border border-[var(--soft)]">
-                <div className="text-[10px] uppercase text-[var(--dim)]">Launch Model</div>
-                <div className="text-[var(--cyan)] font-bold mt-0.5">100% Fair Proof</div>
-              </div>
-            </div>
-
-            <div className="flex items-center justify-between gap-2 pt-1 border-t border-[var(--soft)]">
-              <div className="tagbox a border-[var(--banana)]/30 bg-[var(--banana)]/10 text-[var(--banana)] py-1 px-3 text-[11px] font-mono">
-                <span className="k2">STATUS:</span>
-                <b>{isUnlocked ? 'GATE OPEN' : 'LOCKED BY PROOF'}</b>
-              </div>
-              <div className="tagbox b bg-[var(--live)]/15 border border-[var(--live)]/40 text-[var(--live)] py-1 px-3 text-[11px] font-bold shadow-[0_0_10px_rgba(16,185,129,0.2)] font-mono">
+            {/* Bottom Info Bar */}
+            <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between pointer-events-none">
+              <span className="text-[11px] font-mono text-white/90 font-medium drop-shadow-md">
+                Four Locks Proof Barrier
+              </span>
+              <span className="font-mono text-[10.5px] px-2.5 py-1 rounded-lg bg-black/60 backdrop-blur-md text-[var(--live)] border border-white/10 font-bold shadow-md">
                 WATER LEVEL: {gateLevelPct.toFixed(1)}%
-              </div>
+              </span>
             </div>
           </div>
         </div>

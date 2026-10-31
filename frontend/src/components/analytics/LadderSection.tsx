@@ -154,53 +154,37 @@ export const LadderSection: React.FC = () => {
             Real-time aggregate data collected across Solana. Machine learning weights update continuously as token market caps cross established evaluation thresholds.
           </p>
         </div>
-        {/* Right Side Telemetry Card to fill space */}
-        <div className="rounded-xl border border-[var(--rule)] bg-[var(--panel2)]/90 backdrop-blur-md p-4 shadow-lg flex flex-col gap-3 min-w-[280px] sm:min-w-[340px] max-w-[420px] w-full md:w-auto">
-          {/* Header row: Live Status pill + Engine title */}
-          <div className="flex items-center justify-between gap-3 border-b border-[var(--soft)] pb-2.5">
-            <div className="flex items-center gap-2">
-              <span className="relative flex h-2.5 w-2.5">
+        {/* Right Side 3D Fish Themed Card */}
+        <div className="relative group overflow-hidden rounded-2xl border border-[var(--rule)] shadow-xl bg-[var(--panel2)] min-w-[280px] sm:min-w-[340px] max-w-[420px] w-full md:w-auto h-[180px] sm:h-[195px] flex items-center justify-center flex-shrink-0">
+          <img
+            src="/brand/kip-validation-3d.jpg"
+            alt="Kip the Salmon ML Validation Engine"
+            className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/25 to-black/30 pointer-events-none" />
+
+          {/* Floating Top Badges */}
+          <div className="absolute top-3 left-3 right-3 flex items-center justify-between pointer-events-none">
+            <span className="font-mono text-[10.5px] font-bold px-2.5 py-1 rounded-full bg-black/60 backdrop-blur-md text-[var(--live)] border border-[var(--live)]/40 flex items-center gap-1.5 shadow-sm">
+              <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--live)] opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[var(--live)]"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-[var(--live)]"></span>
               </span>
-              <span className="font-mono text-xs font-bold tracking-wider text-[var(--fg-hi)] uppercase">
-                ML Validation Engine
-              </span>
-            </div>
-            <span className="font-mono text-[10px] px-2 py-0.5 rounded bg-[var(--live)]/15 text-[var(--live)] border border-[var(--live)]/30 font-bold">
+              ML VALIDATION ENGINE
+            </span>
+            <span className="font-mono text-[9.5px] px-2 py-0.5 rounded bg-[var(--live)]/20 backdrop-blur-md text-[var(--live)] border border-[var(--live)]/40 font-bold uppercase tracking-wider">
               ONLINE
             </span>
           </div>
 
-          {/* Metrics 2x2 grid */}
-          <div className="grid grid-cols-2 gap-2 font-mono text-xs">
-            <div className="p-2 rounded-lg bg-[var(--panel)] border border-[var(--soft)]">
-              <div className="text-[10px] uppercase text-[var(--dim)]">Cross-Validation</div>
-              <div className="text-[var(--violet)] font-bold mt-0.5">5-Fold Stratified</div>
-            </div>
-            <div className="p-2 rounded-lg bg-[var(--panel)] border border-[var(--soft)]">
-              <div className="text-[10px] uppercase text-[var(--dim)]">Target Class</div>
-              <div className="text-[var(--live)] font-bold mt-0.5">Peak MC ≥ $30K</div>
-            </div>
-            <div className="p-2 rounded-lg bg-[var(--panel)] border border-[var(--soft)]">
-              <div className="text-[10px] uppercase text-[var(--dim)]">VC Penalty (ε)</div>
-              <div className="text-[var(--cyan)] font-bold mt-0.5">{modelLoaded ? (model.epsilon_vc || 0).toFixed(3) : 'Bound d=37'}</div>
-            </div>
-            <div className="p-2 rounded-lg bg-[var(--panel)] border border-[var(--soft)]">
-              <div className="text-[10px] uppercase text-[var(--dim)]">Launch Target</div>
-              <div className="text-[var(--banana)] font-bold mt-0.5">AUC Floor ≥ 0.60</div>
-            </div>
-          </div>
-
-          {/* Bottom Row: Phase tag + Water Level Progress */}
-          <div className="flex items-center justify-between gap-2 pt-1 border-t border-[var(--soft)]">
-            <div className="tagbox a border-[var(--cyan)]/30 bg-[var(--cyan)]/10 text-[var(--cyan)] py-1 px-3 text-[11px] font-mono">
-              <span className="k2">PHASE:</span>
-              <b>1 · INGESTION</b>
-            </div>
-            <div className="tagbox b bg-[var(--live)]/15 border border-[var(--live)]/40 text-[var(--live)] py-1 px-3 text-[11px] font-bold shadow-[0_0_10px_rgba(16,185,129,0.2)] font-mono">
+          {/* Bottom Info Bar */}
+          <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between pointer-events-none">
+            <span className="text-[11px] font-mono text-white/90 font-medium drop-shadow-md">
+              5-Fold Stratified · d=37
+            </span>
+            <span className="font-mono text-[10.5px] px-2.5 py-1 rounded-lg bg-black/60 backdrop-blur-md text-[var(--banana-hi)] border border-white/10 font-bold shadow-md">
               GATE {gateLevelPct !== '—' ? `${gateLevelPct}%` : '—'}
-            </div>
+            </span>
           </div>
         </div>
       </div>
