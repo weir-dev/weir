@@ -141,7 +141,7 @@ export const LadderSection: React.FC = () => {
   const fi = model.feature_importance || {};
   const topFeatures = Object.entries(fi)
     .sort((a, b) => b[1] - a[1])
-    .slice(0, 5);
+    .slice(0, 4);
   const sumWeights = topFeatures.reduce((acc, cur) => acc + cur[1], 0) || 1;
 
   return (
@@ -307,31 +307,34 @@ export const LadderSection: React.FC = () => {
       </div>
 
       {/* Grid of Details: Streams, Four Locks, Weights, Callout */}
-      <div className="g12">
-        <div className="col">
-          <div className="box tex">
-            <div className="box-h">
-              <h3>
-                <svg width="14" height="14" fill="none" stroke="var(--live)" viewBox="0 0 24 24" aria-hidden="true">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
-                </svg>
-                Active Data Streams &amp; Ingestion Pipeline
-              </h3>
-              <span
-                className="mc-t"
-                style={{
-                  color: isConnected ? 'var(--live)' : 'var(--stall)',
-                  background: isConnected ? 'color-mix(in srgb, var(--live) 10%, transparent)' : 'transparent',
-                  border: isConnected ? '1px solid color-mix(in srgb, var(--live) 30%, transparent)' : '1px solid color-mix(in srgb, var(--stall) 40%, transparent)',
-                }}
-              >
-                {isConnected ? 'STREAMING' : 'OFFLINE'}
-              </span>
+      <div className="g12 items-stretch">
+        <div className="col h-full flex flex-col justify-between">
+          {/* Card 1: Streams */}
+          <div className="box tex flex-1 flex flex-col justify-between">
+            <div>
+              <div className="box-h">
+                <h3>
+                  <svg width="14" height="14" fill="none" stroke="var(--live)" viewBox="0 0 24 24" aria-hidden="true">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                  </svg>
+                  Active Data Streams &amp; Ingestion Pipeline
+                </h3>
+                <span
+                  className="mc-t"
+                  style={{
+                    color: isConnected ? 'var(--live)' : 'var(--stall)',
+                    background: isConnected ? 'color-mix(in srgb, var(--live) 10%, transparent)' : 'transparent',
+                    border: isConnected ? '1px solid color-mix(in srgb, var(--live) 30%, transparent)' : '1px solid color-mix(in srgb, var(--stall) 40%, transparent)',
+                  }}
+                >
+                  {isConnected ? 'STREAMING' : 'OFFLINE'}
+                </span>
+              </div>
+              <p className="d">
+                Continuous ingestion monitoring new Solana token mints, decentralized exchange pairs, and holder accounts.
+              </p>
             </div>
-            <p className="d">
-              Continuous ingestion monitoring new Solana token mints, decentralized exchange pairs, and holder accounts.
-            </p>
-            <div id="streams">
+            <div id="streams" className="flex flex-col gap-2.5 mt-auto">
               <div className="srow">
                 <div style={{ display: 'flex', alignItems: 'center' }}>
                   <span className="dotwrap">
@@ -351,7 +354,7 @@ export const LadderSection: React.FC = () => {
                 </div>
               </div>
 
-              <div className="srow" style={{ marginTop: '12px' }}>
+              <div className="srow">
                 <div style={{ display: 'flex', alignItems: 'center' }}>
                   <span className="dotwrap">
                     <i style={{ background: isConnected ? 'var(--live)' : 'var(--stall)' }} />
@@ -369,7 +372,7 @@ export const LadderSection: React.FC = () => {
                 </div>
               </div>
 
-              <div className="srow" style={{ marginTop: '12px' }}>
+              <div className="srow">
                 <div style={{ display: 'flex', alignItems: 'center' }}>
                   <span className="dotwrap">
                     <i style={{ background: isConnected ? 'var(--live)' : 'var(--stall)' }} />
@@ -389,22 +392,24 @@ export const LadderSection: React.FC = () => {
             </div>
           </div>
 
-          {/* Four Locks */}
-          <div className="box tex">
-            <h3 style={{ fontFamily: 'var(--mono)', fontSize: '12px', textTransform: 'uppercase', letterSpacing: '.05em', color: 'var(--fg)', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
-              <svg width="14" height="14" fill="none" stroke="var(--banana)" viewBox="0 0 24 24" aria-hidden="true">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              Model Validation &amp; Four Locks Status
-            </h3>
-            <div className="gates flex flex-col gap-2">
+          {/* Card 2: Four Locks */}
+          <div className="box tex flex-1 flex flex-col justify-between">
+            <div>
+              <h3 style={{ fontFamily: 'var(--mono)', fontSize: '12px', textTransform: 'uppercase', letterSpacing: '.05em', color: 'var(--fg)', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
+                <svg width="14" height="14" fill="none" stroke="var(--banana)" viewBox="0 0 24 24" aria-hidden="true">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                Model Validation &amp; Four Locks Status
+              </h3>
+            </div>
+            <div className="gates grid grid-cols-1 sm:grid-cols-2 gap-2.5 flex-1">
               {lockList.map((lock, i) => (
-                <div key={i} className="gate p-2.5 rounded-lg border border-[var(--soft)] bg-[var(--panel2)] transition-all">
-                  <div className="gl font-medium text-xs flex items-center gap-1.5">
-                    <span className={`w-1.5 h-1.5 rounded-full ${lock.ok ? 'bg-[var(--live)]' : 'bg-[var(--banana)]'}`} />
-                    Lock {i + 1} · {lock.name}
+                <div key={i} className="gate p-2.5 rounded-lg border border-[var(--soft)] bg-[var(--panel2)] flex flex-col justify-between transition-all">
+                  <div className="gl font-medium text-[11px] leading-tight flex items-start gap-1.5 min-h-[30px]">
+                    <span className={`w-1.5 h-1.5 rounded-full flex-shrink-0 mt-1 ${lock.ok ? 'bg-[var(--live)]' : 'bg-[var(--banana)]'}`} />
+                    <span className="leading-snug">Lock {i + 1} · {lock.name}</span>
                   </div>
-                  <div className="gf flex items-center justify-between mt-1">
+                  <div className="gf flex items-center justify-between mt-2 pt-1.5 border-t border-[var(--soft)]">
                     <span className="gv font-mono font-semibold text-xs" style={{ color: 'var(--fg)' }}>{lock.val}</span>
                     <span className={`gpill ${lock.ok ? 'ok' : 'wip'}`}>
                       {lock.ok ? '✓ OPEN' : '● HOLDING'}
@@ -417,7 +422,7 @@ export const LadderSection: React.FC = () => {
         </div>
 
         {/* Feature Importance + Callout */}
-        <div className="box tex" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+        <div className="box tex flex-1 flex flex-col justify-between h-full">
           <div>
             <div className="box-h" style={{ marginBottom: '8px' }}>
               <h3>
@@ -430,7 +435,7 @@ export const LadderSection: React.FC = () => {
                 {model.d || 37} FEATURES TRACKED
               </span>
             </div>
-            <p className="d" style={{ marginBottom: '20px' }}>
+            <p className="d" style={{ marginBottom: '14px' }}>
               The relative impact of extracted data signals calculated by WEIR&#39;s training algorithm to distinguish tokens that cleared $30K from those held below.
             </p>
 
@@ -446,7 +451,7 @@ export const LadderSection: React.FC = () => {
                 <p className="skel-note">No model run yet. Feature weights appear after the first training run.</p>
               </div>
             ) : (
-              <div className="flex flex-col gap-2.5 my-2">
+              <div className="flex flex-col gap-2 my-1">
                 {topFeatures.map(([code, v], i) => {
                   const pct = ((v / sumWeights) * 100).toFixed(1);
                   const meta = getFeatureMeta(code);
@@ -455,12 +460,12 @@ export const LadderSection: React.FC = () => {
                   return (
                     <div
                       key={code}
-                      className="p-3.5 rounded-lg border border-[var(--soft)] bg-[var(--panel2)] hover:border-[var(--dim)]/30 transition-all flex flex-col gap-2"
+                      className="p-2.5 sm:p-3 rounded-lg border border-[var(--soft)] bg-[var(--panel2)] hover:border-[var(--dim)]/30 transition-all flex flex-col gap-1.5"
                     >
                       {/* Top row: Rank badge + Title + Category Pill + Weight % */}
                       <div className="flex items-center justify-between gap-2">
-                        <div className="flex items-center gap-2 min-w-0">
-                          <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-[var(--panel)] border border-[var(--soft)] text-[var(--dim)]">
+                        <div className="flex items-center gap-1.5 min-w-0">
+                          <span className="px-1.5 py-0.5 rounded text-[10px] font-mono font-bold bg-[var(--panel)] border border-[var(--soft)] text-[var(--dim)]">
                             #{i + 1}
                           </span>
                           <span className="font-mono text-xs font-semibold text-[var(--fg)] truncate">
@@ -470,26 +475,26 @@ export const LadderSection: React.FC = () => {
                             {meta.category}
                           </span>
                         </div>
-                        <div className="flex items-center gap-1.5 flex-shrink-0 font-mono">
+                        <div className="flex items-center gap-1 flex-shrink-0 font-mono">
                           <span className="text-xs font-bold text-[var(--fg)]">{pct}%</span>
                           <span className="text-[10px] text-[var(--dim)]">weight</span>
                         </div>
                       </div>
 
                       {/* Middle row: Informative description */}
-                      <p className="text-[11px] leading-relaxed text-[var(--dim)] m-0">
+                      <p className="text-[11px] leading-snug text-[var(--dim)] m-0">
                         {meta.description}
                       </p>
 
                       {/* Bottom row: Progress bar + Raw Signal identifier */}
-                      <div className="flex items-center gap-2.5 pt-0.5">
+                      <div className="flex items-center gap-2 pt-0.5">
                         <div className="flex-1 bg-[var(--panel)] rounded-full h-1.5 overflow-hidden border border-[var(--soft)]/60">
                           <div
                             className="h-full rounded-full transition-all duration-500"
                             style={{ width: `${pct}%`, background: color }}
                           />
                         </div>
-                        <span className="text-[9.5px] font-mono text-[var(--faint)] tracking-wider uppercase flex-shrink-0">
+                        <span className="text-[9px] font-mono text-[var(--faint)] tracking-wider uppercase flex-shrink-0">
                           {code.replace(/_/g, ' ')}
                         </span>
                       </div>
@@ -500,7 +505,7 @@ export const LadderSection: React.FC = () => {
             )}
           </div>
 
-          <div className="callout">
+          <div className="callout" style={{ marginTop: '16px' }}>
             <div>
               <div className="ck">Gate Water Level</div>
               <div className="cd">
