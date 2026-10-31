@@ -44,19 +44,91 @@ export const LadderSection: React.FC = () => {
     },
   ];
 
-  const featureLabels: Record<string, string> = {
-    holders_log: 'Holder Log Scale Distribution & Retention',
-    hour_cos: '24-Hour Launch Cycle (Cos Signal)',
-    hour_sin: '24-Hour Launch Cycle (Sin Signal)',
-    dow_0: 'Monday Seasonal Inflow Pattern',
-    dow_1: 'Tuesday Seasonal Inflow Pattern',
-    dow_2: 'Wednesday Seasonal Inflow Pattern',
-    dow_3: 'Thursday Seasonal Inflow Pattern',
-    dow_4: 'Friday Seasonal Inflow Pattern',
-    dow_5: 'Saturday Weekend Liquidity Wave',
-    dow_6: 'Sunday Weekend Liquidity Wave',
-    lore_len: 'Metadata Lore Word Count',
-    name_tokens: 'Token Name Token Complexity',
+  interface FeatureMeta {
+    title: string;
+    category: string;
+    description: string;
+  }
+
+  const FEATURE_METADATA: Record<string, FeatureMeta> = {
+    holders_48h: {
+      title: '48h Holder Retention & Growth',
+      category: 'ON-CHAIN',
+      description: 'Tracks unique wallet holder accumulation and retention dynamics across the initial 48-hour trading window.',
+    },
+    holders: {
+      title: 'Unique Holder Count & Retention',
+      category: 'ON-CHAIN',
+      description: 'Tracks unique wallet holder accumulation and retention dynamics at evaluation milestones.',
+    },
+    holders_log: {
+      title: 'Log-Scale Holder Distribution',
+      category: 'ON-CHAIN',
+      description: 'Log-transformed holder count capturing exponential wallet growth velocity.',
+    },
+    launch_hour_utc: {
+      title: 'UTC Launch Timing Cycle',
+      category: 'TEMPORAL',
+      description: 'Evaluates seasonal liquidity inflows based on global market trading sessions and peak volume hours.',
+    },
+    launch_hour: {
+      title: 'UTC Launch Hour Window',
+      category: 'TEMPORAL',
+      description: 'Evaluates time-of-day token creation against historical DEX breakout probabilities.',
+    },
+    hour_cos: {
+      title: '24-Hour Launch Cycle (Cos)',
+      category: 'TEMPORAL',
+      description: 'Cyclical cosine encoding of 24h launch timing aligned with global liquidity tides.',
+    },
+    hour_sin: {
+      title: '24-Hour Launch Cycle (Sin)',
+      category: 'TEMPORAL',
+      description: 'Cyclical sine encoding of 24h launch timing aligned with trading activity waves.',
+    },
+    lore_metadata: {
+      title: 'Token Metadata & Lore Entropy',
+      category: 'METADATA',
+      description: 'Natural language analysis and complexity metrics extracted from token narrative and DEX profile.',
+    },
+    lore_words: {
+      title: 'Metadata Word Density',
+      category: 'METADATA',
+      description: 'Word count and semantic richness extracted from token description and social links.',
+    },
+    lore_len: {
+      title: 'Metadata Lore Word Count',
+      category: 'METADATA',
+      description: 'Character length and linguistic structure in token description and developer lore.',
+    },
+    name_tokens: {
+      title: 'Token Name Complexity',
+      category: 'METADATA',
+      description: 'Token symbol complexity, casing entropy, and ticker semantic patterns.',
+    },
+    pca_embeddings: {
+      title: 'Graph Dimensionality Embeddings',
+      category: 'GRAPH ML',
+      description: 'Principal component representation of cross-token transaction graphs and liquidity cluster co-movement.',
+    },
+  };
+
+  const getFeatureMeta = (code: string): FeatureMeta => {
+    const norm = code.toLowerCase().trim();
+    if (FEATURE_METADATA[norm]) return FEATURE_METADATA[norm];
+    if (FEATURE_METADATA[norm.replace(/_utc$/, '')]) return FEATURE_METADATA[norm.replace(/_utc$/, '')];
+    if (FEATURE_METADATA[norm.replace(/_48h$/, '')]) return FEATURE_METADATA[norm.replace(/_48h$/, '')];
+
+    const formattedTitle = norm
+      .split('_')
+      .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+      .join(' ');
+
+    return {
+      title: `Signal: ${formattedTitle}`,
+      category: 'SIGNAL',
+      description: 'Extracted mathematical telemetry feature contributing to survival classification probability.',
+    };
   };
 
   const colors = [
@@ -135,68 +207,93 @@ export const LadderSection: React.FC = () => {
 
       {/* 4 Overview Metric Cards */}
       <div className="g4">
-        <div className="mc tex border-t-2 border-t-[var(--cyan)] hover:shadow-[0_0_16px_rgba(56,189,248,0.2)]">
+        <div className="mc tex">
           <div className="mc-top">
-            <span className="mc-k text-[var(--cyan)]">Total Tokens Counted</span>
-            <span className="mc-t bg-[var(--cyan)]/15 text-[var(--cyan)] border border-[var(--cyan)]/30 font-bold">
+            <span className="mc-k">Total Tokens Counted</span>
+            <span
+              className="mc-t"
+              style={{
+                background: 'var(--panel2)',
+                color: 'var(--banana)',
+                border: '1px solid color-mix(in srgb, var(--banana) 30%, transparent)',
+              }}
+            >
               LIVE SCAN
             </span>
           </div>
-          <div className="mc-v text-[var(--cyan)]">{tally.all.toLocaleString('en-US')}</div>
+          <div className="mc-v">{tally.all.toLocaleString('en-US')}</div>
           <div className="mc-f">
             <span>Entry Threshold:</span>
-            <b className="text-[var(--cyan)]">&gt; $10K Peak MC</b>
+            <b>&gt; $10K Peak MC</b>
           </div>
         </div>
 
-        <div className="mc tex border-t-2 border-t-[var(--live)] hover:shadow-[0_0_16px_rgba(16,185,129,0.2)]">
+        <div className="mc tex">
           <div className="mc-top">
-            <span className="mc-k text-[var(--live)]">Class Distribution</span>
-            <span className="mc-t bg-[var(--live)]/15 text-[var(--live)] border border-[var(--live)]/30 font-bold">
+            <span className="mc-k">Class Distribution</span>
+            <span
+              className="mc-t"
+              style={{
+                background: 'color-mix(in srgb, var(--live) 15%, transparent)',
+                color: 'var(--live)',
+              }}
+            >
               {clearRate}% Clear Rate
             </span>
           </div>
           <div style={{ display: 'flex', alignItems: 'baseline', gap: '12px', marginTop: '8px' }}>
             <span className="mc-v" style={{ margin: 0, color: 'var(--live)' }}>{tally.pass.toLocaleString('en-US')}</span>
-            <span className="mono" style={{ fontSize: '13px', color: 'var(--live)', opacity: 0.85 }}>cleared $30K</span>
-            <span className="mono" style={{ fontSize: '12px', color: 'var(--stall)', marginLeft: 'auto', fontWeight: 600 }}>
+            <span className="mono" style={{ fontSize: '14px', color: 'var(--dim)' }}>cleared $30K</span>
+            <span className="mono" style={{ fontSize: '12px', color: 'var(--stall)', marginLeft: 'auto', fontWeight: 500 }}>
               {tally.stall.toLocaleString('en-US')} held
             </span>
           </div>
           <div className="minibar overflow-hidden rounded-full bg-[var(--stall)]/30 mt-2">
-            <i style={{ display: 'block', height: '100%', width: `${clearRate}%`, background: 'var(--live)', boxShadow: '0 0 8px var(--live)', transition: 'width .5s' }} />
+            <i style={{ display: 'block', height: '100%', width: `${clearRate}%`, background: 'var(--live)', boxShadow: '0 0 8px var(--live-glow)', transition: 'width .5s' }} />
           </div>
         </div>
 
-        <div className="mc tex border-t-2 border-t-[var(--violet)] hover:shadow-[0_0_16px_rgba(192,132,252,0.2)]">
+        <div className="mc tex">
           <div className="mc-top">
-            <span className="mc-k text-[var(--violet)]">Model Accuracy &amp; Floor</span>
-            <span className="mc-t bg-[var(--violet)]/15 text-[var(--violet)] border border-[var(--violet)]/30 font-bold">
+            <span className="mc-k">Model Accuracy &amp; VC Floor</span>
+            <span
+              className="mc-t"
+              style={{
+                background: 'color-mix(in srgb, var(--cyan) 15%, transparent)',
+                color: 'var(--cyan)',
+              }}
+            >
               ROC-AUC
             </span>
           </div>
           <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px', marginTop: '8px' }}>
-            <span className="mc-v" style={{ margin: 0, color: 'var(--violet)' }}>
+            <span className="mc-v" style={{ margin: 0, color: 'var(--cyan)' }}>
               {modelLoaded ? (model.auc || 0).toFixed(4) : '—'}
             </span>
             <span className="mono" style={{ fontSize: '12px', color: 'var(--dim)' }}>Measured</span>
           </div>
           <div className="mc-f">
-            <span>Proven Floor (ε={modelLoaded ? (model.epsilon_vc || 0).toFixed(3) : '—'}):</span>
+            <span>VC Bound Floor (ε={modelLoaded ? (model.epsilon_vc || 0).toFixed(3) : '—'}):</span>
             <b style={{ color: 'var(--banana)', fontWeight: 700 }}>
               {modelLoaded ? (model.proven_floor || 0).toFixed(3) : '—'}
             </b>
           </div>
         </div>
 
-        <div className="mc tex border-t-2 border-t-[var(--banana)] hover:shadow-[0_0_16px_rgba(252,100,35,0.2)]">
+        <div className="mc tex">
           <div className="mc-top">
-            <span className="mc-k text-[var(--banana)]">Feature Dimension Vector</span>
-            <span className="mc-t bg-[var(--banana)]/15 text-[var(--banana)] border border-[var(--banana)]/30 font-bold">
+            <span className="mc-k">Feature Dimension Vector</span>
+            <span
+              className="mc-t"
+              style={{
+                background: 'color-mix(in srgb, var(--violet) 15%, transparent)',
+                color: 'var(--violet)',
+              }}
+            >
               d = {model.d || 37}
             </span>
           </div>
-          <div className="mc-v" style={{ color: 'var(--banana)' }}>
+          <div className="mc-v" style={{ color: 'var(--violet)' }}>
             {model.d || 37}
             <span style={{ fontSize: '15px', letterSpacing: 0, fontWeight: 400, color: 'var(--dim)', marginLeft: '10px' }}>
               signal parameters
@@ -204,7 +301,7 @@ export const LadderSection: React.FC = () => {
           </div>
           <div className="mc-f">
             <span>Evaluation Window:</span>
-            <b className="text-[var(--banana)]">Launch Hour 0 – 24 UTC</b>
+            <b>Launch Hour 0 – 24</b>
           </div>
         </div>
       </div>
@@ -302,14 +399,14 @@ export const LadderSection: React.FC = () => {
             </h3>
             <div className="gates flex flex-col gap-2">
               {lockList.map((lock, i) => (
-                <div key={i} className={`gate p-2.5 rounded-lg border transition-all ${lock.ok ? 'border-emerald-500/30 bg-emerald-500/5' : 'border-orange-500/25 bg-orange-500/5'}`}>
+                <div key={i} className="gate p-2.5 rounded-lg border border-[var(--soft)] bg-[var(--panel2)] transition-all">
                   <div className="gl font-medium text-xs flex items-center gap-1.5">
                     <span className={`w-1.5 h-1.5 rounded-full ${lock.ok ? 'bg-[var(--live)]' : 'bg-[var(--banana)]'}`} />
                     Lock {i + 1} · {lock.name}
                   </div>
                   <div className="gf flex items-center justify-between mt-1">
-                    <span className="gv font-mono font-semibold text-xs" style={{ color: lock.ok ? 'var(--live)' : 'var(--banana)' }}>{lock.val}</span>
-                    <span className={`gpill ${lock.ok ? 'ok' : 'wip pulse'}`}>
+                    <span className="gv font-mono font-semibold text-xs" style={{ color: 'var(--fg)' }}>{lock.val}</span>
+                    <span className={`gpill ${lock.ok ? 'ok' : 'wip'}`}>
                       {lock.ok ? '✓ OPEN' : '● HOLDING'}
                     </span>
                   </div>
@@ -349,22 +446,52 @@ export const LadderSection: React.FC = () => {
                 <p className="skel-note">No model run yet. Feature weights appear after the first training run.</p>
               </div>
             ) : (
-              <div className="fw">
+              <div className="flex flex-col gap-2.5 my-2">
                 {topFeatures.map(([code, v], i) => {
                   const pct = ((v / sumWeights) * 100).toFixed(1);
+                  const meta = getFeatureMeta(code);
+                  const color = colors[i % colors.length];
+
                   return (
-                    <div key={code} className="fw-row">
-                      <div className="t">
-                        <span style={{ display: 'flex', alignItems: 'center' }}>
-                          <span className="rk">#{i + 1}</span>
-                          <span style={{ color: 'var(--fg)', fontWeight: 500 }}>
-                            {featureLabels[code] || `Signal ${code.toUpperCase()}`}
+                    <div
+                      key={code}
+                      className="p-3.5 rounded-lg border border-[var(--soft)] bg-[var(--panel2)] hover:border-[var(--dim)]/30 transition-all flex flex-col gap-2"
+                    >
+                      {/* Top row: Rank badge + Title + Category Pill + Weight % */}
+                      <div className="flex items-center justify-between gap-2">
+                        <div className="flex items-center gap-2 min-w-0">
+                          <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-[var(--panel)] border border-[var(--soft)] text-[var(--dim)]">
+                            #{i + 1}
                           </span>
-                        </span>
-                        <b style={{ color: 'var(--fg)' }}>{pct}%</b>
+                          <span className="font-mono text-xs font-semibold text-[var(--fg)] truncate">
+                            {meta.title}
+                          </span>
+                          <span className="px-1.5 py-0.5 rounded text-[9px] font-mono font-medium bg-[var(--panel)] text-[var(--dim)] uppercase border border-[var(--soft)] tracking-wider hidden sm:inline-block">
+                            {meta.category}
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-1.5 flex-shrink-0 font-mono">
+                          <span className="text-xs font-bold text-[var(--fg)]">{pct}%</span>
+                          <span className="text-[10px] text-[var(--dim)]">weight</span>
+                        </div>
                       </div>
-                      <div className="bar">
-                        <i style={{ width: `${pct}%`, background: colors[i % colors.length] }} />
+
+                      {/* Middle row: Informative description */}
+                      <p className="text-[11px] leading-relaxed text-[var(--dim)] m-0">
+                        {meta.description}
+                      </p>
+
+                      {/* Bottom row: Progress bar + Raw Signal identifier */}
+                      <div className="flex items-center gap-2.5 pt-0.5">
+                        <div className="flex-1 bg-[var(--panel)] rounded-full h-1.5 overflow-hidden border border-[var(--soft)]/60">
+                          <div
+                            className="h-full rounded-full transition-all duration-500"
+                            style={{ width: `${pct}%`, background: color }}
+                          />
+                        </div>
+                        <span className="text-[9.5px] font-mono text-[var(--faint)] tracking-wider uppercase flex-shrink-0">
+                          {code.replace(/_/g, ' ')}
+                        </span>
                       </div>
                     </div>
                   );

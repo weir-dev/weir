@@ -13,11 +13,11 @@ export const CountStrip: React.FC = () => {
   return (
     <div className="stats-grid band shadow-lg">
       <div className="st">
-        <div className="st-k flex items-center gap-1.5 text-[var(--cyan)]">
-          <span className="w-1.5 h-1.5 rounded-full bg-[var(--cyan)] animate-pulse" />
+        <div className="st-k flex items-center gap-1.5 text-[var(--fg-hi)]">
+          <span className="w-1.5 h-1.5 rounded-full bg-[var(--fg-hi)] animate-pulse" />
           Entered The River
         </div>
-        <div className="st-v" style={{ color: 'var(--cyan)' }}>
+        <div className="st-v" style={{ color: 'var(--fg-hi)' }}>
           {tally.all.toLocaleString('en-US')}
         </div>
         <div className="st-d font-mono text-xs opacity-75">Solana tokens peak MC ≥ $10K</div>
