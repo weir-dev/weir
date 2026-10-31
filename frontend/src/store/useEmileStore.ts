@@ -93,22 +93,22 @@ export const useEmileStore = create<EmileState>((set, get) => ({
   stage: 'ingest · solana mainnet',
   codeBuffer: '',
   tokens: [],
-  counters: { pump: 147, dex: 147, rpc: 147 },
-  tally: { all: 147, pass: 56, stall: 0 },
+  counters: { pump: 269, dex: 269, rpc: 269 },
+  tally: { all: 269, pass: 95, stall: 0 },
   holdersList: [1420],
 
   model: {
     run_id: 1,
-    n: 147,
-    n_positive: 56,
+    n: 269,
+    n_positive: 95,
     d: 37,
     auc: 0.5480,
     auc_std: 0.0215,
-    epsilon_vc: 0.911,
+    epsilon_vc: 0.723,
     auc_boot_lower: 0.500,
-    proven_floor: 0.507,
-    gate_level: 0.0735,
-    jar_level: 0.0735,
+    proven_floor: 0.5134,
+    gate_level: 0.1345,
+    jar_level: 0.1345,
     locks: {
       lock_samples: false,
       lock_cleared: false,
@@ -122,7 +122,7 @@ export const useEmileStore = create<EmileState>((set, get) => ({
       lock_no_lookahead: false
     },
     held_by_lock: 'Lock 1',
-    blocked_by: 'Lock 1 is holding: 147 of 2,000 tokens counted.'
+    blocked_by: 'Lock 1 is holding: 269 of 2,000 tokens counted.'
   },
   modelLoaded: true,
   gatesConfig: {

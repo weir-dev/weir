@@ -5,7 +5,7 @@ import { useEmileStore } from '@/store/useEmileStore';
 
 export const RiverHero: React.FC = () => {
   const model = useEmileStore((state) => state.model);
-  const gateLevelPct = Math.round((model.gate_level || 0) * 100);
+  const gateLevelPct = (model.gate_level || 0) * 100;
   const videoRef = React.useRef<HTMLVideoElement>(null);
 
   React.useEffect(() => {
