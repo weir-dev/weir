@@ -41,37 +41,63 @@ export default function WeirTokenPage() {
               $WEIR does not launch on a schedule. The river gate only opens when the proven floor clears ROC-AUC 0.60 and all Four Locks are verified.
             </p>
           </div>
-          {/* Right Side 3D Fish Themed Card */}
-          <div className="relative group overflow-hidden rounded-2xl border border-[var(--rule)] shadow-xl bg-[var(--panel2)] min-w-[280px] sm:min-w-[340px] max-w-[420px] w-full md:w-auto h-[180px] sm:h-[195px] flex items-center justify-center flex-shrink-0">
-            <img
-              src="/brand/kip-gate-3d.jpg"
-              alt="Kip the Salmon at the $WEIR Token Launch Gate"
-              className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+          {/* Right Side 3D Fish Mascot Card (Kip the Salmon #0342) */}
+          <div className="relative group overflow-hidden rounded-2xl border border-amber-500/25 shadow-2xl bg-gradient-to-br from-[#1E1911] via-[#15120D] to-[#0E0C09] min-w-[300px] sm:min-w-[360px] max-w-[430px] w-full md:w-auto h-[185px] sm:h-[195px] flex items-center justify-between p-4 flex-shrink-0">
+            {/* Subtle Grid Pattern */}
+            <div 
+              className="absolute inset-0 opacity-10 pointer-events-none"
+              style={{
+                backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(255,255,255,0.4) 1px, transparent 0)',
+                backgroundSize: '14px 14px'
+              }}
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/25 to-black/30 pointer-events-none" />
 
-            {/* Floating Top Badges */}
-            <div className="absolute top-3 left-3 right-3 flex items-center justify-between pointer-events-none">
-              <span className="font-mono text-[10.5px] font-bold px-2.5 py-1 rounded-full bg-black/60 backdrop-blur-md text-[var(--banana-hi)] border border-[var(--banana)]/40 flex items-center gap-1.5 shadow-sm">
-                <span className="relative flex h-2 w-2">
-                  <span className={`animate-ping absolute inline-flex h-full w-full rounded-full ${isUnlocked ? 'bg-[var(--live)]' : 'bg-[var(--banana)]'} opacity-75`}></span>
-                  <span className={`relative inline-flex rounded-full h-2 w-2 ${isUnlocked ? 'bg-[var(--live)]' : 'bg-[var(--banana)]'}`}></span>
+            {/* Ambient Glow behind Kip */}
+            <div className="absolute right-3 top-1/2 -translate-y-1/2 w-40 h-40 rounded-full bg-amber-500/15 blur-2xl pointer-events-none" />
+            <div className="absolute right-6 top-1/2 -translate-y-1/2 w-28 h-28 rounded-full bg-orange-500/15 blur-xl pointer-events-none" />
+
+            {/* Left Info Column */}
+            <div className="relative z-10 flex flex-col justify-between h-full py-0.5 max-w-[185px] sm:max-w-[210px]">
+              {/* Top row: Status */}
+              <div className="flex flex-col gap-1.5">
+                <div className="flex items-center gap-2">
+                  <span className="relative flex h-2 w-2">
+                    <span className={`animate-ping absolute inline-flex h-full w-full rounded-full ${isUnlocked ? 'bg-emerald-400' : 'bg-amber-400'} opacity-75`}></span>
+                    <span className={`relative inline-flex rounded-full h-2 w-2 ${isUnlocked ? 'bg-emerald-400' : 'bg-amber-400'}`}></span>
+                  </span>
+                  <span className={`font-mono text-[10px] font-bold tracking-widest uppercase ${isUnlocked ? 'text-emerald-400' : 'text-amber-400'}`}>
+                    {isUnlocked ? 'GATE OPEN' : 'STRICT BARRIER'}
+                  </span>
+                </div>
+                <h3 className="font-sans font-extrabold text-sm sm:text-base text-white tracking-tight leading-snug">
+                  Launch Gate Barrier
+                </h3>
+              </div>
+
+              {/* Middle metrics */}
+              <div className="flex flex-col gap-0.5 font-mono text-[11px]">
+                <span className="text-zinc-300 font-medium">Solana SPL Token</span>
+                <span className="text-amber-300 font-semibold text-[10.5px]">Four Hard Locks Active</span>
+              </div>
+
+              {/* Bottom: Agent tag + Water Level Pill */}
+              <div className="flex items-center gap-2 pt-1">
+                <span className="font-mono text-[10px] px-2 py-0.5 rounded bg-orange-500/15 text-orange-400 border border-orange-500/30 font-bold uppercase tracking-wider">
+                  AGENT #0342
                 </span>
-                LAUNCH GATE BARRIER
-              </span>
-              <span className={`font-mono text-[9.5px] px-2 py-0.5 rounded ${isUnlocked ? 'bg-[var(--live)]/20 text-[var(--live)] border-[var(--live)]/40' : 'bg-[var(--banana)]/20 text-[var(--banana-hi)] border-[var(--banana)]/40'} border font-bold uppercase tracking-wider backdrop-blur-md`}>
-                {isUnlocked ? 'GATE OPEN' : 'STRICT BARRIER'}
-              </span>
+                <span className={`font-mono text-[10.5px] px-2.5 py-0.5 rounded-lg bg-black/60 backdrop-blur-md ${isUnlocked ? 'text-emerald-400' : 'text-amber-400'} border border-white/10 font-bold shadow-md`}>
+                  WATER: {gateLevelPct.toFixed(1)}%
+                </span>
+              </div>
             </div>
 
-            {/* Bottom Info Bar */}
-            <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between pointer-events-none">
-              <span className="text-[11px] font-mono text-white/90 font-medium drop-shadow-md">
-                Four Locks Proof Barrier
-              </span>
-              <span className="font-mono text-[10.5px] px-2.5 py-1 rounded-lg bg-black/60 backdrop-blur-md text-[var(--live)] border border-white/10 font-bold shadow-md">
-                WATER LEVEL: {gateLevelPct.toFixed(1)}%
-              </span>
+            {/* Right: Kip the Salmon 3D Model (Exact user image) */}
+            <div className="relative z-10 h-full flex items-center justify-end flex-shrink-0 pl-2">
+              <img
+                src="/brand/kip-front.png"
+                alt="Kip the Salmon (WEIR Agent #0342)"
+                className="h-[148px] sm:h-[165px] w-auto object-contain drop-shadow-[0_12px_24px_rgba(0,0,0,0.85)] transition-all duration-500 ease-out group-hover:scale-108 group-hover:-translate-y-1"
+              />
             </div>
           </div>
         </div>
